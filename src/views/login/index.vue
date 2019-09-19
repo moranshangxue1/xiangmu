@@ -81,13 +81,14 @@ export default {
           this.$axios({
             method: 'post',
             url: '/authorizations',
-            data: this.LoginFormS
+            data: this.LoginForm
           }).then(result => {
             // 将后台返回的taken令牌存储到前端缓存中
             window.localStorage.setItem('user-token', result.data.data.token)
             this.$router.push('/home') // 跳转到主页
+            // catch抛出的信息
           }).catch(() => {
-            //   提示消息
+            //   提示消息 失败请求
             this.$message({
               type: 'warning',
               message: '您的手机号或者验证码错误'
