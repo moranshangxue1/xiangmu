@@ -84,7 +84,7 @@ export default {
             data: this.LoginForm
           }).then(result => {
             // 将后台返回的taken令牌存储到前端缓存中
-            window.localStorage.setItem('user-token', result.data.data.token)
+            window.localStorage.setItem('user-token', result.data.token)
             this.$router.push('/home') // 跳转到主页
             // catch抛出的信息
           }).catch(() => {
