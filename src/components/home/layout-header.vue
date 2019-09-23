@@ -8,17 +8,18 @@
     </el-col>
     <!-- 右侧 -->
     <el-col :span="6">
-      <img class="head-img" src="../../assets/img/avatar.jpg" alt="">
+      <img class="head-img" :src="userInfo.photo ? userInfo.photo : defaultImg" alt="">
        <!-- 下拉菜单菜单组件 el-dropdown-->
-      <el-dropdown trigger="click">
+      <el-dropdown trigger="click" @command="commonClick">
        <!-- 匿名插槽 -->
         <span class="el-dropdown-link">
 
-        83期同学<i class="el-icon-arrow-down el-icon--right"></i>
+        {{userInfo.name}}<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <!-- 具名插槽 dropdown -->
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人信息</el-dropdown-item>
+          <!-- command 属性会在触发点击时 携带给command事件的方法 -->
+          <el-dropdown-item command="account">个人信息</el-dropdown-item>
           <el-dropdown-item>git地址</el-dropdown-item>
           <el-dropdown-item>退出</el-dropdown-item>
         </el-dropdown-menu>
@@ -29,7 +30,42 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      userInfo: {}, // 个人信息对象
+      defaultImg: require('../../assets/img/avatar.jpg')// 转成base64
+    }
+  },
+  methods: {
+    // 获取用户个人资料
+    getUserInfo () {
+      // let token = windows.localStorage.getItems('user-token')// 从前端缓存中获取token
+      this.$axios({
+        url: '/user/profile'
+        // headers: { 'Authorization': `Bearer ${token}` }
+      }).then(result => {
+        this.userInfo = result.data // 接收数据对象
+      })
+    },
+    // 公共点击事件
+    commonClick (key) {
+      if (key === 'account') {
+      // 跳转到账户信息
+        this.$router.push('/home/account')
+      } else if (key === 'git') {
+      // 去项目git 地址
+        window.location.href = 'https://github.com/shuiruohanyu/83heimatoutiao'
+      } else {
+      // 退出
+        window.localStorage.clear() // 只能清除本项目的所有前端缓存
+        this.$router.push('/login') // 跳转到登录页
+      }
+    }
+  },
+  // 钩子函数
+  created () {
+    this.getUserInfo()
+  }
 }
 </script>
 

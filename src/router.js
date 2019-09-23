@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // import Home from './views/home/index.vue' // 路由级组件  完整写法
 import Home from './views/home/'
-import Login from './views/login'
+import Login from './views/login/'
+import Main from './views/home/main'
 
 Vue.use(Router)
 
@@ -11,12 +12,17 @@ export default new Router({
   routes: [{
     path: '/', // 强制推到home下
     redirect: '/home'
-
   },
   // 首页路由
   {
     path: '/home',
-    component: Home
+    component: Home,
+    children: [
+      {
+        path: '',
+        component: Main
+      }
+    ]
   },
   // 登录路由
   {
