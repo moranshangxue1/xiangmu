@@ -19,8 +19,14 @@ export default new Router({
     component: Home,
     children: [
       {
-        path: '',
-        component: Main
+        path: '', // 什么都不写 就是默认二级路由组件的
+        component: Main // 默认二级路由
+      },
+      {
+        // 两个都可以
+        // path: '/home/comment', //评论列表路径
+        path: 'comment', // 评论列表路径
+        component: () => import('./views/comment')
       }
     ]
   },
