@@ -41,6 +41,7 @@ export default {
     this.getComment()
   }
 }
+// table使用和过滤提交反了
 </script>
 
 <style>
