@@ -45,7 +45,7 @@ axios.interceptors.response.use(function (response) {
     default:
       break
   }
-  Message({ message })
+  Message({ message, type: 'warning' })
   // return Promise.reject(error)
   // 希望在异常处理函数中所有的错误都处理完毕 不在进入catch 终止错误
   return new Promise(function () {}) // 终止当前的错误
