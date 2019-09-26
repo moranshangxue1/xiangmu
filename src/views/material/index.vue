@@ -3,15 +3,17 @@
       <!-- header具名 是给卡片的具名 -->
         <bread-crumb slot="header">
       <!-- title具名 是面包屑组件的具名 -->
-          <template slot="title">
-              素材管理
-          </template>
+        <template slot="title">素材管</template>
         </bread-crumb>
+        <!-- http-request自定义上传 -->
+            <el-upload :show-file-list="false" :http-request="uploadImg" action="" class="too-difficult">
+                <el-button type="primary">我是点击上传</el-button>
+            </el-upload>
         <el-tabs v-model="activeName" @tab-click="changeTab">
             <el-tab-pane label="全部素材" name="all">
                 <div class="img-list">
                     <el-card class="img-item" v-for="item in list" :key="item.id">
-                        <img :src="item.url" alt="">
+                        <img :src="item.url" alt= />
                         <div class="operate">
                             <i :style='{color: item.is_collected ? "red" : "#000"}' class="el-icon-star-on"></i>
                             <i class="el-icon-delete-solid"></i>
@@ -55,6 +57,19 @@ export default {
     }
   },
   methods: {
+    //   上传发
+    uploadImg (params) {
+      const data = new FormData() // 声明一个新的表单
+      data.append('image', params.file)
+      // 上传文件
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data
+      }).then(() => {
+        this.getMaterial()
+      })
+    },
     //   把当页码改变时会传入一个参数
     changePage (newPage) {
       this.page.currentPage = newPage // 将最新页码赋值给currentPage
@@ -89,6 +104,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.too-difficult {
+    position: absolute;
+    right: 20px;
+    margin-top: -10px;
+    z-index: 1;
+}
    .img-list {
     //    display: inline;
        display: flex;
