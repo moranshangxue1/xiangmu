@@ -10,17 +10,22 @@
       <el-form style="margin-left:50px">
           <!-- 文章状态 -->
             <el-form-item label="文章状态：">
-                <el-radio-group>
-                    <el-radio>全部</el-radio>
-                    <el-radio>草稿</el-radio>
-                    <el-radio>待审核</el-radio>
-                    <el-radio>审核通过</el-radio>
-                    <el-radio>审核失败</el-radio>
+                <!-- v-model 来源于el-radio中的lable -->
+                <el-radio-group v-model="formData.status">
+                    <el-radio :label="5">全部</el-radio>
+                    <el-radio :label="0">草稿</el-radio>
+                    <el-radio :label="1">待审核</el-radio>
+                    <el-radio :label="2">审核通过</el-radio>
+                    <el-radio :label="3">审核失败</el-radio>
                 </el-radio-group>
           </el-form-item>
           <!-- 频道列表 -->
           <el-form-item label="频道列表：">
-              <el-select>
+              <el-select v-model="formData.channel_id">
+                  <!-- 循环生成el-option -->
+                  <el-option v-for="item in channels" :key="item.id" :value="item.id" :label="item.name">
+
+                  </el-option>
               </el-select>
           </el-form-item>
           <el-form-item label="时间选择：">
@@ -59,9 +64,13 @@
 export default {
   data () {
     return {
+      formData: {
+        status: 5, // 文章状态 0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除
+        channel_id: '' // 频道id
+      },
       list: [],
-      defaultImg: require('../../assets/img/default.gif'), // 将图片地址转成base64
-      value: ''
+      channels: [], // 定义一个频道的对象
+      defaultImg: require('../../assets/img/default.gif') // 将图片地址转成base64
     }
   },
   methods: {
@@ -71,9 +80,18 @@ export default {
       }).then(result => {
         this.list = result.data.results // 获取文章列表
       })
+    },
+    // 获取频道列表
+    getChannels () {
+      this.$axios({
+        url: '/channels'
+      }).then(result => {
+        this.channels = result.data.channels // 获取channels
+      })
     }
   },
   created () {
+    this.getChannels() // 获取频道
     this.getArticles() // 获取文章
   },
   filters: {
